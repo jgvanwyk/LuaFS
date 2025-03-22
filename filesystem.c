@@ -102,26 +102,42 @@ int CanonicalPath(lua_State *L) {
 
 int FileName(lua_State *L) {
     const char *path = luaL_checkstring(L, 1);
-    char *fileName = basename(path);
+    char *pathCopy = strdup(path);
+    if (!pathCopy) {
+        lua_pushnil(L);
+        lua_pushfstring(L, "Could not get file name of %s: %s", path, strerror(errno));
+        return 2;
+    }
+    char *fileName = basename(pathCopy);
     if (fileName) {
         lua_pushstring(L, fileName);
+        free(pathCopy);
         return 1;
     } else {
         lua_pushnil(L);
         lua_pushfstring(L, "Could not get file name of %s: %s", path, strerror(errno));
+        free(pathCopy);
         return 2;
     }
 }
 
 int DirectoryPath(lua_State *L) {
     const char *path = luaL_checkstring(L, 1);
-    char *directoryPath = dirname(path);
+    char *pathCopy = strdup(path);
+    if (!pathCopy) {
+        lua_pushnil(L);
+        lua_pushfstring(L, "Could not get directory path of %s: %s", path, strerror(errno));
+        return 2;
+    }
+    char *directoryPath = dirname(pathCopy);
     if (directoryPath) {
         lua_pushstring(L, directoryPath);
+        free(pathCopy);
         return 1;
     } else {
         lua_pushnil(L);
-        lua_pushfstring(L, "Could not get directory name of %s: %s", path, strerror(errno));
+        lua_pushfstring(L, "Could not get directory path of %s: %s", path, strerror(errno));
+        free(pathCopy);
         return 2;
     }
 }
@@ -130,6 +146,11 @@ int DirectoryIterator(lua_State *L) {
     const char *path = luaL_checkstring(L, 1);
     char *paths[] = {(char *)path, NULL};
     DirectoryIteratorState *state = lua_newuserdata(L, sizeof *state);
+    if (!state) {
+        lua_pushnil(L);
+        lua_pushfstring(L, "Could not open %s: %s", path, strerror(errno));
+        return 2;
+    }
     state->ftsp = NULL;
     state->currentEntry = NULL;
     state->iterationFlags = 0;

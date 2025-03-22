@@ -16,7 +16,7 @@ Returns a table of attributes for the file at the given `path`. If an error occu
 The returned table contains the following information:
 |Key|Value|
 |-|-|
-|`type`|A `string` describing the type of the file. The possible values are `"BlockDevice"`, `"CharacterDevice"`, `"Directory"`, `"NamedPipe"`, `"RegularFile"`, `"SymbolicLink"`, `"Socket"`.|
+|`type`|A `string` describing the type of the file. The possible values are `"BlockDevice"`, `"CharacterDevice"`, `"Directory"`, `"NamedPipe"`, `"RegularFile"`, `"SymbolicLink"`, `"Socket"` and `"Other"`.|
 |`modificationTime`|A `number` representing the Unix time value at which the file’s data was last modified.|
 |`changeTime`|A `number` representing the Unix time value at which the file’s status was last changed .|
 |`creationTime`|A `number` representing the Unix time value at which the file was created.|
